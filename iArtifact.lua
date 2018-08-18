@@ -2,35 +2,24 @@
 -- Setting up scope, upvalues and libs
 -----------------------------------
 
-local AddonName, iReputation = ...;
-LibStub("AceEvent-3.0"):Embed(iReputation);
+local AddonName, iArtifact = ...;
+LibStub("AceEvent-3.0"):Embed(iArtifact);
 
 --local L = LibStub("AceLocale-3.0"):GetLocale(AddonName);
 
 local _G = _G;
 local format = _G.string.format;
 
-local FACTION_BAR_COLORS = {
-	[1] = {r = 0.63, g = 0, b = 0},
-	[2] = {r = 0.63, g = 0, b = 0},
-	[3] = {r = 0.63, g = 0, b = 0},
-	[4] = {r = 0.82, g = 0.67, b = 0},
-	[5] = {r = 0.32, g = 0.67, b = 0},
-	[6] = {r = 0.32, g = 0.67, b = 0},
-	[7] = {r = 0.32, g = 0.67, b = 0},
-	[8] = {r = 0, g = 0.75, b = 0.44},
-};
-
 -------------------------------
 -- Registering with iLib
 -------------------------------
 
-LibStub("iLib"):Register(AddonName, nil, iReputation);
+LibStub("iLib"):Register(AddonName, nil, iArtifact);
 
 ------------------------------------------
 -- Variables, functions and colors
 ------------------------------------------
-
+--[[
 local CharName = _G.GetUnitName("player", false); -- The charname doesn't change during a session. To prevent calling the function more than once, we simply store the name.
 
 local COLOR_GOLD = "|cfffed100%s|r";
@@ -436,7 +425,6 @@ function iReputation:UpdateTooltip(tip)
 			ReputationFrame_SetRowType(factionRow, isChild, isHeader, hasRep);
 			
 			factionRow:Show();
-	--]]
 	
 	for i = 1, _G.GetNumFactions() do
 		-- 1     2     3           4       5       6         7          8               9         10           11      12         13       14         15               16
@@ -533,3 +521,5 @@ function iReputation:UpdateTooltip(tip)
 		
 	end
 end
+
+--]]
