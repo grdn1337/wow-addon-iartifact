@@ -10,6 +10,8 @@ LibStub("AceEvent-3.0"):Embed(iArtifact);
 local _G = _G;
 local format = _G.string.format;
 
+local LibCrayon = LibStub("LibCrayon-3.0");
+
 -------------------------------
 -- Registering with iLib
 -------------------------------
@@ -65,7 +67,7 @@ local MaximumPower = 0;
 iArtifact.ldb = LibStub("LibDataBroker-1.1"):NewDataObject(AddonName, {
 	type = "data source",
 	text = AddonName,
-	icon = "Interface\\Addons\\iReputation\\Images\\iReputation",
+	icon = "Interface\\Addons\\iArtifact\\Images\\iArtifact",
 });
 
 iArtifact.ldb.OnEnter = function(anchor)
@@ -121,6 +123,11 @@ iArtifact:RegisterEvent("PLAYER_ENTERING_WORLD", "Boot");
 -- UpdateArtifact
 ------------------------------------------
 
+local function get_label()
+	local percent = MaximumPower and CurrentPower / MaximumPower * 100 or 0;
+	return ("%s/%s |cff%s%d%%|r"):format(_G.BreakUpLargeNumbers(CurrentPower), _G.BreakUpLargeNumbers(MaximumPower), LibCrayon:GetThresholdHexColor(percent, 100), percent)
+end
+
 function iArtifact:UpdateData()
 	-- get current power
 	local azeriteItemLocation = _G.C_AzeriteItem.FindActiveAzeriteItem();
@@ -134,7 +141,7 @@ function iArtifact:UpdateData()
 
 	-- update text
 	if( CurrentPower and MaximumPower ) then
-		self.ldb.text = "tada";
+		self.ldb.text = get_label();
 	else
 		self.ldb.text = AddonName;
 	end

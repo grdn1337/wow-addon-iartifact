@@ -4,6 +4,6 @@
 ## Notes: The artifact power display for your broker bar!
 ## Author: grdn
 ## SavedVariables: iArtifactDB
-## OptionalDeps: Ace3, iLib
+## OptionalDeps: Ace3, iLib, LibCrayon-3.0
 
 includes.xml
