@@ -125,7 +125,7 @@ iArtifact:RegisterEvent("PLAYER_ENTERING_WORLD", "Boot");
 
 local function get_label()
 	local percent = MaximumPower and CurrentPower / MaximumPower * 100 or 0;
-	return ("%s/%s |cff%s%d%%|r"):format(_G.BreakUpLargeNumbers(CurrentPower), _G.BreakUpLargeNumbers(MaximumPower), LibCrayon:GetThresholdHexColor(percent, 100), percent)
+	return ("%s/%s |cff%s%d%%|r"):format(_G.BreakUpLargeNumbers(CurrentPower), _G.BreakUpLargeNumbers(MaximumPower), LibCrayon:GetThresholdHexColor(percent, 100), percent);
 end
 
 function iArtifact:UpdateData()
@@ -136,8 +136,6 @@ function iArtifact:UpdateData()
 	else
 		CurrentPower, MaximumPower = nil, nil;
 	end
-
-	print(CurrentPower, MaximumPower);
 
 	-- update text
 	if( CurrentPower and MaximumPower ) then
