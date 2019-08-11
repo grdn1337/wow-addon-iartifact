@@ -1,6 +1,6 @@
-## Interface: 80000
+## Interface: 80200
 ## Title: i|cffffffaaArtifact|r
-## Version: 8.0.0
+## Version: 8.2.0
 ## Notes: The artifact power display for your broker bar!
 ## Author: grdn
 ## SavedVariables: iArtifactDB

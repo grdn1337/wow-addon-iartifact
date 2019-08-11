@@ -123,8 +123,21 @@ iArtifact:RegisterEvent("PLAYER_ENTERING_WORLD", "Boot");
 -- UpdateArtifact
 ------------------------------------------
 
-local function get_label()
-	local percent = MaximumPower and CurrentPower / MaximumPower * 100 or 0;
+local function get_perc(a, x)
+	if( x and x > 0 ) then
+		return a / x * 100;
+	end
+
+	return 0;
+end
+
+local function get_label(noColor)
+	local percent = get_perc(CurrentPower, MaximumPower);
+
+	if( noColor ) then
+		return ("%s/%s %d%%"):format(_G.BreakUpLargeNumbers(CurrentPower), _G.BreakUpLargeNumbers(MaximumPower), percent);
+	end
+
 	return ("%s/%s |cff%s%d%%|r"):format(_G.BreakUpLargeNumbers(CurrentPower), _G.BreakUpLargeNumbers(MaximumPower), LibCrayon:GetThresholdHexColor(percent, 100), percent);
 end
 
@@ -154,13 +167,13 @@ local cell_provider, cell_prototype = LibStub("LibQTip-1.0"):CreateCellProvider(
 function cell_prototype:InitializeCell()
 	local bar = self:CreateTexture(nil, "ARTWORK", self);
 	self.bar = bar;
-	bar:SetWidth(100);
+	bar:SetWidth(200);
 	bar:SetHeight(14);
 	bar:SetPoint("LEFT", self, "LEFT", 1, 0);
 	
 	local bg = self:CreateTexture(nil, "BACKGROUND");
 	self.bg = bg;
-	bg:SetWidth(102);
+	bg:SetWidth(202);
 	bg:SetHeight(16);
 	bg:SetColorTexture(0, 0, 0, 0.5);
 	bg:SetPoint("LEFT", self);
@@ -175,14 +188,14 @@ function cell_prototype:InitializeCell()
 	self.r, self.g, self.b = 1, 1, 1;
 end
 
-function cell_prototype:SetupCell(tip, data, justification, font, r, g, b)
+function cell_prototype:SetupCell(tip, label, justification, font)
 	local bar = self.bar;
 	local fs = self.fs;
-	local label, perc, standing, hasBonusRepGain, isParagon = unpack(data);
-	local c = FACTION_BAR_COLORS[standing] or {r=1, g=1, b=1};
+	local perc = get_perc(CurrentPower, MaximumPower);
+	local r, g, b = LibCrayon:GetThresholdColor(perc, 100);
 	
-	bar:SetVertexColor(c.r, c.g, c.b);
-	bar:SetWidth(perc);
+	bar:SetVertexColor(r, g, b);
+	bar:SetWidth(perc * 2);
 	bar:SetTexture("Interface\\TargetingFrame\\UI-StatusBar");
 	if( perc == 0 ) then
 		bar:Hide();
@@ -211,6 +224,17 @@ end
 -- UpdateTooltip
 ------------------------------------------
 
-function iArtifact:UpdateTooltip()
+function iArtifact:UpdateTooltip(tip)
+	tip:Clear();
+	tip:SetColumnLayout(2, "LEFT", "RIGHT")
 
+	local line;
+
+	-- if Hearth of Azeroth is equipped, show the progress bar
+	local hearthLink = _G.GetInventoryItemLink("player", 2);
+	if( hearthLink and _G.GetItemInfoInstant(hearthLink) == 158075 ) then -- actually Hearth of Azeroth
+		line = tip:AddLine(hearthLink);
+
+		tip:SetCell(line, 2, get_label(true), cell_provider, 1, 0, 0);
+	end
 end
